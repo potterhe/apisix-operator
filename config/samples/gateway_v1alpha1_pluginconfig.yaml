@@ -1,0 +1,12 @@
+apiVersion: gateway.apisix.apache.org/v1alpha1
+kind: PluginConfig
+metadata:
+  labels:
+    app.kubernetes.io/name: pluginconfig
+    app.kubernetes.io/instance: pluginconfig-sample
+    app.kubernetes.io/part-of: apisix-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: apisix-operator
+  name: pluginconfig-sample
+spec:
+  # TODO(user): Add fields here
