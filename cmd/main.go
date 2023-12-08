@@ -33,7 +33,11 @@ import (
 
 	gatewayv1alpha1 "github.com/api7/apisix-operator/api/v1alpha1"
 	"github.com/api7/apisix-operator/internal/controller"
+	"github.com/api7/apisix-operator/internal/gatewayapi"
+
 	//+kubebuilder:scaffold:imports
+
+	gwapiv1 "sigs.k8s.io/gateway-api/apis/v1"
 )
 
 var (
@@ -46,6 +50,8 @@ func init() {
 
 	utilruntime.Must(gatewayv1alpha1.AddToScheme(scheme))
 	//+kubebuilder:scaffold:scheme
+
+	utilruntime.Must(gwapiv1.AddToScheme(scheme))
 }
 
 func main() {
@@ -97,6 +103,14 @@ func main() {
 		os.Exit(1)
 	}
 	//+kubebuilder:scaffold:builder
+
+	if err = (&gatewayapi.HTTPRouteReconciler{
+		Client: mgr.GetClient(),
+		Scheme: mgr.GetScheme(),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "HTTPRoute")
+		os.Exit(1)
+	}
 
 	if err := mgr.AddHealthzCheck("healthz", healthz.Ping); err != nil {
 		setupLog.Error(err, "unable to set up health check")
