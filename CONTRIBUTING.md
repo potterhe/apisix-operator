@@ -19,5 +19,5 @@ operator-sdk create api --group gateway --version v1alpha1 --kind PluginConfig -
 ## protobuf
 
 ```sh
-protoc --go_out=. --go_opt=paths=source_relative proto/adminapi/route.proto
+protoc --go_out=. --go_opt=paths=source_relative proto/adminapi/*.proto
 ```

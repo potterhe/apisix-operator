@@ -32,7 +32,12 @@ spec:
 [{
 	"name": "example-route",
 	"uris": ["/*"],
-	"hosts": ["example.com"]
+	"hosts": ["example.com"],
+	"upstream": {
+        "nodes": {
+            "example-svc:80": 1
+        }
+    }
 }]
 `
 
@@ -53,7 +58,7 @@ spec:
 		t.Errorf("Failed to unmarshal: %v", err)
 	}
 
-	opts := cmpopts.IgnoreUnexported(adminapi.Route{})
+	opts := cmpopts.IgnoreUnexported(adminapi.Route{}, adminapi.Upstream{})
 	diff := cmp.Diff(*want, got, opts)
 	if diff != "" {
 		t.Errorf("Translate failed: %s", diff)

@@ -2,11 +2,16 @@ syntax = "proto3";
 
 package apisix.adminapi;
 
+import "proto/adminapi/upstream.proto";
+
 option go_package = "proto/adminapi";
 
 // https://apisix.apache.org/docs/apisix/admin-api/#route-api
 message Route {
     string name = 1;
-    repeated string uris = 2;
-    repeated string hosts = 3;
+    string desc = 2;
+    map<string, string> labels = 3;
+    repeated string uris = 4;
+    repeated string hosts = 5;
+    Upstream upstream = 6;
 }

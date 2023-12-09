@@ -2,6 +2,7 @@ package gatewayapi
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/api7/apisix-operator/proto/adminapi"
 	gwapiv1 "sigs.k8s.io/gateway-api/apis/v1"
@@ -60,6 +61,18 @@ func translateRule(rule *gwapiv1.HTTPRouteRule) (*adminapi.Route, error) {
 				return nil, errors.New("unknown path match type " + string(*match.Path.Type))
 			}
 		}
+	}
+
+	if len(rule.BackendRefs) > 0 {
+		upstream := new(adminapi.Upstream)
+		upstream.Nodes = make(map[string]int32)
+
+		for _, ref := range rule.BackendRefs {
+			nodeItemKey := fmt.Sprintf("%s:%d", ref.Name, int32(*ref.Port))
+			upstream.Nodes[nodeItemKey] = 1
+		}
+
+		route.Upstream = upstream
 	}
 
 	return route, nil

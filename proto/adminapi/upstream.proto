@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package apisix.adminapi;
+
+option go_package = "proto/adminapi";
+
+// https://apisix.apache.org/docs/apisix/admin-api/#upstream-api
+message Upstream {
+    string name = 1;
+    string desc = 2;
+    map<string, string> labels = 3;
+    map<string, int32> nodes = 4;
+}
