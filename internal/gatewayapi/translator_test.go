@@ -13,32 +13,27 @@ import (
 
 func TestTranslate(t *testing.T) {
 	crd := `
-apiVersion: gateway.networking.k8s.io/v1
+apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
-  name: backend
+  name: example-route
 spec:
   parentRefs:
-    - name: eg
+  - name: example-gateway
   hostnames:
-    - "www.example.com"
+  - "example.com"
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /
-      backendRefs:
-        - group: ""
-          kind: Service
-          name: backend
-          port: 8080
-          weight: 1
+  - backendRefs:
+    - name: example-svc
+      port: 80
 `
 
 	wantStr := `
-{
-	"name": "backend"
-}
+[{
+	"name": "example-route",
+	"uris": ["/*"],
+	"hosts": ["example.com"]
+}]
 `
 
 	in := new(gwapiv1.HTTPRoute)
@@ -52,14 +47,14 @@ spec:
 		t.Errorf("Translate failed: %v", err)
 	}
 
-	want := new(adminapi.Route)
+	want := new([]*adminapi.Route)
 	err = json.Unmarshal([]byte(wantStr), want)
 	if err != nil {
 		t.Errorf("Failed to unmarshal: %v", err)
 	}
 
 	opts := cmpopts.IgnoreUnexported(adminapi.Route{})
-	diff := cmp.Diff(want, got, opts)
+	diff := cmp.Diff(*want, got, opts)
 	if diff != "" {
 		t.Errorf("Translate failed: %s", diff)
 	}
