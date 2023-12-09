@@ -15,3 +15,9 @@ operator-sdk init --domain apisix.apache.org --repo github.com/api7/apisix-opera
 ```sh
 operator-sdk create api --group gateway --version v1alpha1 --kind PluginConfig --resource --controller
 ```
+
+## protobuf
+
+```sh
+protoc --go_out=. --go_opt=paths=source_relative proto/adminapi/route.proto
+```

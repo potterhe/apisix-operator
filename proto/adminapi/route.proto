@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package apisix.adminapi;
+
+option go_package = "proto/adminapi";
+
+// https://apisix.apache.org/docs/apisix/admin-api/#route-api
+message Route {
+    string name = 1;
+    repeated string uris = 2;
+    repeated string hosts = 3;
+}
