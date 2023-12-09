@@ -8,7 +8,7 @@ import (
 	gwapiv1 "sigs.k8s.io/gateway-api/apis/v1"
 )
 
-func translate(in *gwapiv1.HTTPRoute) ([]*adminapi.Route, error) {
+func translateHTTPRoute(in *gwapiv1.HTTPRoute) ([]*adminapi.Route, error) {
 	var routes []*adminapi.Route
 
 	var hosts []string
